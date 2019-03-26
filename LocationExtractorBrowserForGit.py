@@ -36,9 +36,11 @@ def job_flow():
 
 def start_chrome():
     opt = webdriver.ChromeOptions()
-    opt.add_argument('--headless')
+    opt.binary_location = chrome_binary_path
+    # opt.add_argument('--headless')
     # driver = webdriver.Chrome('./chromedriver-73.exe', options=opt)
-    driver = webdriver.Chrome('./chromedriver-73.exe')
+    # driver = webdriver.Chrome('./chromedriver-73.exe')
+    driver = webdriver.Chrome(executable_path=driver_path, chrome_options=opt)
 
     # Google ログイン画面
     login_url = 'https://www.google.com/accounts?hl=ja-JP'
