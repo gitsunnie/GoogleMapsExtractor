@@ -5,8 +5,8 @@ import re
 
 # import schedule
 
-from bs4 import BeautifulSoup
-import urllib.request as req
+# from bs4 import BeautifulSoup
+# import urllib.request as req
 
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -131,8 +131,8 @@ if __name__ == '__main__':
     """
 
     job_flow()
-    # time.sleep(300)  # 5分待つ
-    time.sleep(30)
+    time.sleep(300)  # 5分待つ
+    # time.sleep(30)
     job_flow()
 
 
