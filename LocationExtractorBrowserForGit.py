@@ -38,7 +38,7 @@ def start_chrome():
     opt = webdriver.ChromeOptions()
     opt.add_argument('--headless')
     # driver = webdriver.Chrome('chromedriver-72.exe', options=opt)
-    driver = webdriver.Chrome('chromedriver-72.exe')
+    driver = webdriver.Chrome('./chromedriver-72.exe')
 
     # Google ログイン画面
     login_url = 'https://www.google.com/accounts?hl=ja-JP'
