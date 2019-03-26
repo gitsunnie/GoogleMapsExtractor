@@ -37,7 +37,7 @@ def job_flow():
 def start_chrome():
     opt = webdriver.ChromeOptions()
     opt.add_argument('--headless')
-    # driver = webdriver.Chrome('chromedriver-72.exe', options=opt)
+    # driver = webdriver.Chrome('./chromedriver-72.exe', options=opt)
     driver = webdriver.Chrome('./chromedriver-72.exe')
 
     # Google ログイン画面
