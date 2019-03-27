@@ -39,7 +39,7 @@ def start_chrome():
     # opt.binary_location = chrome_binary_path
     opt.binary_location = '/app/.apt/usr/bin/google-chrome'
     driver_path = '/app/.chromedriver/bin/chromedriver'
-    # opt.add_argument('--headless')
+    opt.add_argument('--headless')
     # driver = webdriver.Chrome('./chromedriver-73.exe', options=opt)
     # driver = webdriver.Chrome('./chromedriver-73.exe')
     driver = webdriver.Chrome(executable_path=driver_path, chrome_options=opt)
