@@ -36,12 +36,15 @@ def job_flow():
 def start_chrome():
     opt = webdriver.ChromeOptions()
     opt.add_argument('--headless')
-    # driver = webdriver.Chrome('../chromedriver-72.exe', options=opt)
-    driver = webdriver.Chrome('../chromedriver-72.exe')
+    driver = webdriver.Chrome('chromedriver-73.exe', options=opt)
+    # driver = webdriver.Chrome('chromedriver-73.exe')
 
     # Google ログイン画面
     login_url = 'https://www.google.com/accounts?hl=ja-JP'
     driver.get(login_url)
+
+    # driver.maximize_window()
+    driver.set_window_size(1200, 600)
 
     return driver
 
@@ -52,21 +55,33 @@ def login_google(driver):
     login_pw = 'trialaccount'
 
     # 最大待機時間 (sec)
-    wait_time = 30
+    wait_time = 10
 
     # ID の入力
-    login_id_xpath = '//*[@id="identifierNext"]'
+    login_id_xpath = '//*[@id="identifierNext"] | //*[@id="Email"]'
     # xpathの要素が見つかるまで待機します。
     WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_id_xpath)))
-    driver.find_element_by_name("identifier").send_keys(login_id)
-    driver.find_element_by_xpath(login_id_xpath).click()
+    # driver.find_element_by_name("identifier").send_keys(login_id)
+    driver.find_element_by_name('Email').send_keys(login_id)
+    # driver.find_element_by_xpath(login_id_xpath).click()
+    next_button_xpath = '//*[@id="next"]'
+    driver.find_element_by_xpath(next_button_xpath).click()
+
+    """
+    time.sleep(5)
+    driver.save_screenshot('b.png')
+    html = driver.page_source
+    soup = BeautifulSoup(html, 'html.parser')
+    with open('test.html', 'w', encoding='utf-8') as f:
+        f.write(html)
+    """
 
     # パスワードを入力
-    login_pw_xpath = '//*[@id="passwordNext"]'
+    login_pw_xpath = '//*[@id="passwordNext"] | //*[@id="Passwd"]'
     # xpathの要素が見つかるまで待機します。
     WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_pw_xpath)))
-
-    driver.find_element_by_name("password").send_keys(login_pw)
+    # driver.find_element_by_name("password").send_keys(login_pw)
+    driver.find_element_by_name("Passwd").send_keys(login_pw)
     time.sleep(1)  # クリックされずに処理が終わるのを防ぐために追加。
     driver.find_element_by_xpath(login_pw_xpath).click()
 
@@ -79,14 +94,26 @@ def search_map(driver):
     driver.switch_to.window(driver.window_handles[1])  # switch new tab
     driver.get(map_url)
 
+    """
     time.sleep(5)
     # driver.find_element_by_id('#widget-mylocation')
     driver.find_element_by_xpath('//*[@id="widget-mylocation"]').click()
-
-    print(driver.current_url)
-    location_url = driver.current_url
+    """
 
     try:
+        # 現在地を探索するボタンが出てくるまで待機
+        current_location_xpath = '//*[@id="widget-mylocation"]'
+        wait_time = 10
+        WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, current_location_xpath)))
+
+        # driver.find_element_by_id('#widget-mylocation')
+        driver.find_element_by_xpath('//*[@id="widget-mylocation"]').click()
+
+        time.sleep(5)
+
+        print(driver.current_url)
+        location_url = driver.current_url
+
         # 現在位置 (座標を探索)
         # a = re.search('[.+]' + '@' + '(.+)' + ', ' + '(.+)' + '[.+]', str(location_url))'
         pattern = '@' + '([0-9.]*)' + ',' + '([0-9.]*)'
@@ -98,6 +125,7 @@ def search_map(driver):
     except:
         latitude = 'error'
         longitude = 'error'
+        location_url = 'error'
 
     # 現在時間を取得
     dt_now = datetime.datetime.now()
@@ -107,7 +135,7 @@ def search_map(driver):
     present_time = dt_now.time()
 
     # csv に書き込み
-    with open('MapsLocationHistory.csv', mode='a') as f:
+    with open('test.csv', mode='a') as f:
         writer = csv.writer(f)
         writing_list = [present_year, present_month, present_day, present_time, latitude, longitude, location_url]
         writer.writerow(writing_list)
@@ -116,12 +144,18 @@ def search_map(driver):
 
 
 if __name__ == '__main__':
+    """
     schedule.every(5).minutes.do(job_flow)
 
     while True:
         schedule.run_pending()
         time.sleep(1)
+    """
 
+    job_flow()
+    time.sleep(300)  # 5分待つ
+    # time.sleep(30)
+    job_flow()
 
 
 

@@ -60,18 +60,21 @@ def login_google(driver):
     wait_time = 30
 
     # ID の入力
-    login_id_xpath = '//*[@id="identifierNext"]'
-    # xpathの要素が見つかるまで待機します
+    login_id_xpath = '//*[@id="identifierNext"] | //*[@id="Email"]'
+    # xpathの要素が見つかるまで待機します。
     WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_id_xpath)))
-    driver.find_element_by_name("identifier").send_keys(login_id)
-    driver.find_element_by_xpath(login_id_xpath).click()
+    # driver.find_element_by_name("identifier").send_keys(login_id)
+    driver.find_element_by_name('Email').send_keys(login_id)
+    # driver.find_element_by_xpath(login_id_xpath).click()
+    next_button_xpath = '//*[@id="next"]'
+    driver.find_element_by_xpath(next_button_xpath).click()
 
     # パスワードを入力
-    login_pw_xpath = '//*[@id="passwordNext"]'
+    login_pw_xpath = '//*[@id="passwordNext"] | //*[@id="Passwd"]'
     # xpathの要素が見つかるまで待機します。
     WebDriverWait(driver, wait_time).until(EC.presence_of_element_located((By.XPATH, login_pw_xpath)))
-
-    driver.find_element_by_name("password").send_keys(login_pw)
+    # driver.find_element_by_name("password").send_keys(login_pw)
+    driver.find_element_by_name("Passwd").send_keys(login_pw)
     time.sleep(1)  # クリックされずに処理が終わるのを防ぐために追加。
     driver.find_element_by_xpath(login_pw_xpath).click()
 
@@ -84,6 +87,12 @@ def search_map(driver):
     driver.switch_to.window(driver.window_handles[1])  # switch new tab
     driver.get(map_url)
 
+    """
+    time.sleep(5)
+    # driver.find_element_by_id('#widget-mylocation')
+    driver.find_element_by_xpath('//*[@id="widget-mylocation"]').click()
+    """
+
     try:
         # 現在地を探索するボタンが出てくるまで待機
         current_location_xpath = '//*[@id="widget-mylocation"]'
@@ -92,6 +101,8 @@ def search_map(driver):
 
         # driver.find_element_by_id('#widget-mylocation')
         driver.find_element_by_xpath('//*[@id="widget-mylocation"]').click()
+
+        time.sleep(5)
 
         print(driver.current_url)
         location_url = driver.current_url
