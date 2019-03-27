@@ -57,7 +57,7 @@ def login_google(driver):
     login_pw = 'trialaccount'
 
     # 最大待機時間 (sec)
-    wait_time = 30
+    wait_time = 10
 
     # ID の入力
     login_id_xpath = '//*[@id="identifierNext"] | //*[@id="Email"]'
